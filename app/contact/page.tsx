@@ -4,6 +4,8 @@ import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
 import { site } from "@/lib/site";
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/SocialIcons";
+import Reveal from "@/components/motion/Reveal";
+import HoverCard from "@/components/motion/HoverCard";
 
 export const metadata: Metadata = {
   title: "Contact | D Lions FC Rwanda",
@@ -22,46 +24,52 @@ export default function ContactPage() {
 
       <section className="bg-white py-20 sm:py-24">
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <div>
-            <h2 className="font-display text-2xl font-bold text-lion-black">Send Us A Message</h2>
-            <p className="mt-2 text-sm text-lion-black/60">
-              Fill out the form and it will open in your email app, ready to send.
-            </p>
-            <div className="mt-8">
-              <ContactForm />
+          <Reveal direction="left">
+            <div>
+              <h2 className="font-display text-2xl font-bold text-lion-black">Send Us A Message</h2>
+              <p className="mt-2 text-sm text-lion-black/60">
+                Fill out the form and it will open in your email app, ready to send.
+              </p>
+              <div className="mt-8">
+                <ContactForm />
+              </div>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="space-y-6">
-            <a
-              href={`https://wa.me/${site.contact.whatsappIntl}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 rounded-xl border border-lion-black/5 bg-lion-cream p-6 transition-shadow hover:shadow-md"
-            >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
-                <MessageCircle size={22} />
-              </div>
-              <div>
-                <p className="font-display text-sm font-semibold text-lion-black">
-                  WhatsApp / Call
-                </p>
-                <p className="text-sm text-lion-black/60">{site.contact.whatsapp}</p>
-              </div>
-            </a>
+          <Reveal direction="right" delay={0.1} className="space-y-6">
+            <HoverCard lift={3}>
+              <a
+                href={`https://wa.me/${site.contact.whatsappIntl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-xl border border-lion-black/5 bg-lion-cream p-6 transition-shadow hover:shadow-md"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
+                  <MessageCircle size={22} />
+                </div>
+                <div>
+                  <p className="font-display text-sm font-semibold text-lion-black">
+                    WhatsApp / Call
+                  </p>
+                  <p className="text-sm text-lion-black/60">{site.contact.whatsapp}</p>
+                </div>
+              </a>
+            </HoverCard>
 
-            <a
-              href={`mailto:${site.contact.email}`}
-              className="flex items-center gap-4 rounded-xl border border-lion-black/5 bg-lion-cream p-6 transition-shadow hover:shadow-md"
-            >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-lion-green-900 text-lion-gold-400">
-                <Mail size={22} />
-              </div>
-              <div>
-                <p className="font-display text-sm font-semibold text-lion-black">Email</p>
-                <p className="text-sm text-lion-black/60">{site.contact.email}</p>
-              </div>
-            </a>
+            <HoverCard lift={3}>
+              <a
+                href={`mailto:${site.contact.email}`}
+                className="flex items-center gap-4 rounded-xl border border-lion-black/5 bg-lion-cream p-6 transition-shadow hover:shadow-md"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-lion-green-900 text-lion-gold-400">
+                  <Mail size={22} />
+                </div>
+                <div>
+                  <p className="font-display text-sm font-semibold text-lion-black">Email</p>
+                  <p className="text-sm text-lion-black/60">{site.contact.email}</p>
+                </div>
+              </a>
+            </HoverCard>
 
             <div className="flex items-center gap-4 rounded-xl border border-lion-black/5 bg-lion-cream p-6">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-lion-green-900 text-lion-gold-400">
@@ -99,7 +107,7 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

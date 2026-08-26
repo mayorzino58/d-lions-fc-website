@@ -1,8 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronLeft, Mail, MessageCircle, RotateCcw } from "lucide-react";
 import { ageGroups, site } from "@/lib/site";
+
+const stepVariants = {
+  enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 24 : -24 }),
+  center: { opacity: 1, x: 0 },
+  exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -24 : 24 }),
+};
+
+const stepOrder: Step[] = ["select", "form", "confirm"];
 
 type Step = "select" | "form" | "confirm";
 
@@ -28,8 +37,14 @@ const initialForm: FormState = {
 
 export default function RegistrationFlow() {
   const [step, setStep] = useState<Step>("select");
+  const [direction, setDirection] = useState(1);
   const [group, setGroup] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(initialForm);
+
+  function goTo(next: Step) {
+    setDirection(stepOrder.indexOf(next) > stepOrder.indexOf(step) ? 1 : -1);
+    setStep(next);
+  }
 
   const groupLabel = useMemo(
     () => ageGroups.find((g) => g.id === group)?.label ?? "",
@@ -42,12 +57,12 @@ export default function RegistrationFlow() {
 
   function handleSelectGroup(id: string) {
     setGroup(id);
-    setStep("form");
+    goTo("form");
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setStep("confirm");
+    goTo("confirm");
   }
 
   const summaryLines = [
@@ -70,6 +85,7 @@ export default function RegistrationFlow() {
   const emailHref = `mailto:${site.contact.email}?subject=${emailSubject}&body=${emailBody}`;
 
   function reset() {
+    setDirection(-1);
     setStep("select");
     setGroup(null);
     setForm(initialForm);
@@ -103,8 +119,17 @@ export default function RegistrationFlow() {
         ))}
       </div>
 
+      <AnimatePresence mode="wait" custom={direction}>
       {step === "select" && (
-        <div>
+        <motion.div
+          key="select"
+          custom={direction}
+          variants={stepVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
+        >
           <h2 className="text-center font-display text-2xl font-bold text-lion-black">
             Choose A Program
           </h2>
@@ -113,11 +138,13 @@ export default function RegistrationFlow() {
           </p>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
             {ageGroups.map((g) => (
-              <button
+              <motion.button
                 key={g.id}
                 type="button"
                 onClick={() => handleSelectGroup(g.id)}
-                className="rounded-xl border border-lion-black/10 bg-white p-6 text-center shadow-sm transition-all hover:-translate-y-0.5 hover:border-lion-gold-500 hover:shadow-md"
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                whileTap={{ scale: 0.96 }}
+                className="rounded-xl border border-lion-black/10 bg-white p-6 text-center shadow-sm transition-colors hover:border-lion-gold-500 hover:shadow-md"
               >
                 <div className="font-display text-3xl font-bold text-lion-green-900">
                   {g.label}
@@ -125,17 +152,25 @@ export default function RegistrationFlow() {
                 <p className="mt-2 text-xs leading-relaxed text-lion-black/60">
                   {g.description}
                 </p>
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {step === "form" && (
-        <div>
+        <motion.div
+          key="form"
+          custom={direction}
+          variants={stepVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
+        >
           <button
             type="button"
-            onClick={() => setStep("select")}
+            onClick={() => goTo("select")}
             className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-lion-green-800 hover:text-lion-green-900"
           >
             <ChevronLeft size={16} />
@@ -249,18 +284,28 @@ export default function RegistrationFlow() {
               />
             </div>
 
-            <button
+            <motion.button
               type="submit"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               className="w-full rounded-md bg-lion-gold-500 px-6 py-3.5 text-sm font-semibold text-lion-black transition-colors hover:bg-lion-gold-400"
             >
               Review Registration
-            </button>
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
       )}
 
       {step === "confirm" && (
-        <div>
+        <motion.div
+          key="confirm"
+          custom={direction}
+          variants={stepVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
+        >
           <div className="rounded-2xl border border-lion-green-900/10 bg-lion-cream p-6 sm:p-8">
             <h2 className="font-display text-xl font-bold text-lion-black">
               Almost there, {form.parentName.split(" ")[0] || "there"}!
@@ -337,8 +382,9 @@ export default function RegistrationFlow() {
               Start a new registration
             </button>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 }
