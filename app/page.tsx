@@ -70,7 +70,7 @@ export default function Home() {
               <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-white/70 lg:mx-0">
                 D Lions FC Rwanda is a youth football academy building disciplined,
                 talented players through professional coaching and meaningful
-                competition &mdash; for U10, U13, U15, U16, and U18.
+                competition &mdash; for U10, U13, U15, U17, and U20.
               </p>
             </Reveal>
             <Reveal delay={0.3}>
@@ -173,7 +173,7 @@ export default function Home() {
             <div className="text-center">
               <SectionLabel>Academy Programs</SectionLabel>
               <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
-                Registration Open For U10 &ndash; U18
+                Registration Open For U10 &ndash; U20
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-white/70">
                 Can your kids play football? Does your son love the game? Register

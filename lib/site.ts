@@ -151,13 +151,13 @@ export const ageGroups = [
     description: "Advanced technical and tactical training with a pathway focus.",
   },
   {
-    id: "u16",
-    label: "U16",
+    id: "u17",
+    label: "U17",
     description: "Elevated tactical intelligence and competitive match exposure.",
   },
   {
-    id: "u18",
-    label: "U18",
+    id: "u20",
+    label: "U20",
     description: "Pathway-focused training preparing players for higher-level football.",
   },
 ];

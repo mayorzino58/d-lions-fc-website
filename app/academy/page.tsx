@@ -11,7 +11,7 @@ import { ageGroups, fees, site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Academy Registration | D Lions FC Rwanda",
   description:
-    "Register your child for D Lions FC Rwanda's football academy programs — U10 through U18. Professional coaching, skill development, and disciplined training.",
+    "Register your child for D Lions FC Rwanda's football academy programs — U10 through U20. Professional coaching, skill development, and disciplined training.",
 };
 
 const features = [
@@ -53,7 +53,7 @@ export default function AcademyPage() {
             <div className="text-center">
               <SectionLabel>Registration Open For</SectionLabel>
               <h2 className="mt-4 font-display text-3xl font-bold text-lion-black sm:text-4xl">
-                U10 &middot; U13 &middot; U15 &middot; U16 &middot; U18
+                U10 &middot; U13 &middot; U15 &middot; U17 &middot; U20
               </h2>
             </div>
           </Reveal>
