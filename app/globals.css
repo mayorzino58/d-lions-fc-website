@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f6f1;
+  --foreground: #0b1410;
+
+  --color-lion-black: #0a0e0c;
+  --color-lion-green-950: #06231a;
+  --color-lion-green-900: #0b3d24;
+  --color-lion-green-800: #0f4d2d;
+  --color-lion-green-700: #146638;
+  --color-lion-gold-400: #f2cb6b;
+  --color-lion-gold-500: #e0b04a;
+  --color-lion-gold-600: #c4913a;
+  --color-lion-cream: #f7f6f1;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-oswald);
+
+  --color-lion-black: var(--color-lion-black);
+  --color-lion-green-950: var(--color-lion-green-950);
+  --color-lion-green-900: var(--color-lion-green-900);
+  --color-lion-green-800: var(--color-lion-green-800);
+  --color-lion-green-700: var(--color-lion-green-700);
+  --color-lion-gold-400: var(--color-lion-gold-400);
+  --color-lion-gold-500: var(--color-lion-gold-500);
+  --color-lion-gold-600: var(--color-lion-gold-600);
+  --color-lion-cream: var(--color-lion-cream);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-oswald), var(--font-geist-sans), sans-serif;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #f2cb6b 0%, #e0b04a 50%, #c4913a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(242, 203, 107, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242, 203, 107, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+::selection {
+  background: var(--color-lion-gold-500);
+  color: var(--color-lion-black);
+}
