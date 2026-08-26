@@ -1,8 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, ChevronLeft, Mail, MessageCircle, RotateCcw } from "lucide-react";
+import {
+  Check,
+  ChevronLeft,
+  FileText,
+  Image as ImageIcon,
+  Mail,
+  MessageCircle,
+  RotateCcw,
+  UploadCloud,
+} from "lucide-react";
 import { ageGroups, site } from "@/lib/site";
 
 const stepVariants = {
@@ -23,6 +32,8 @@ type FormState = {
   email: string;
   address: string;
   message: string;
+  birthCertificate: File | null;
+  passportPhoto: File | null;
 };
 
 const initialForm: FormState = {
@@ -33,6 +44,8 @@ const initialForm: FormState = {
   email: "",
   address: "",
   message: "",
+  birthCertificate: null,
+  passportPhoto: null,
 };
 
 export default function RegistrationFlow() {
@@ -40,6 +53,19 @@ export default function RegistrationFlow() {
   const [direction, setDirection] = useState(1);
   const [group, setGroup] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(initialForm);
+  const birthCertInputRef = useRef<HTMLInputElement>(null);
+  const passportPhotoInputRef = useRef<HTMLInputElement>(null);
+
+  const passportPreviewUrl = useMemo(
+    () => (form.passportPhoto ? URL.createObjectURL(form.passportPhoto) : null),
+    [form.passportPhoto]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (passportPreviewUrl) URL.revokeObjectURL(passportPreviewUrl);
+    };
+  }, [passportPreviewUrl]);
 
   function goTo(next: Step) {
     setDirection(stepOrder.indexOf(next) > stepOrder.indexOf(step) ? 1 : -1);
@@ -75,6 +101,8 @@ export default function RegistrationFlow() {
     `Email: ${form.email}`,
     form.address ? `Address: ${form.address}` : null,
     form.message ? `Message: ${form.message}` : null,
+    `Birth Certificate: ${form.birthCertificate ? form.birthCertificate.name + " (attached separately)" : "Not provided"}`,
+    `Passport Photo: ${form.passportPhoto ? form.passportPhoto.name + " (attached separately)" : "Not provided"}`,
   ].filter(Boolean) as string[];
 
   const whatsappText = encodeURIComponent(summaryLines.join("\n"));
@@ -89,6 +117,8 @@ export default function RegistrationFlow() {
     setStep("select");
     setGroup(null);
     setForm(initialForm);
+    if (birthCertInputRef.current) birthCertInputRef.current.value = "";
+    if (passportPhotoInputRef.current) passportPhotoInputRef.current.value = "";
   }
 
   return (
@@ -284,6 +314,93 @@ export default function RegistrationFlow() {
               />
             </div>
 
+            <div className="rounded-lg border border-lion-gold-500/30 bg-lion-cream/60 p-4">
+              <p className="text-sm font-medium text-lion-black/70">Required Documents</p>
+              <p className="mt-1 text-xs leading-relaxed text-lion-black/50">
+                Please upload a copy of the child&rsquo;s birth certificate and a
+                recent passport photo. You&rsquo;ll attach these files yourself
+                when sending via WhatsApp or Email in the next step, since they
+                can&rsquo;t be sent automatically.
+              </p>
+
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="birthCertificate" className="block text-sm font-medium text-lion-black/70">
+                    Birth Certificate
+                  </label>
+                  <label
+                    htmlFor="birthCertificate"
+                    className="mt-1.5 flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded-md border-2 border-dashed border-lion-black/15 bg-white px-4 py-5 text-center transition-colors hover:border-lion-gold-500"
+                  >
+                    {form.birthCertificate ? (
+                      <>
+                        <FileText size={22} className="text-lion-green-800" />
+                        <span className="max-w-full truncate text-xs font-medium text-lion-black">
+                          {form.birthCertificate.name}
+                        </span>
+                        <span className="text-[11px] text-lion-black/40">Tap to change</span>
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud size={22} className="text-lion-black/30" />
+                        <span className="text-xs text-lion-black/50">
+                          Tap to upload (PDF or image)
+                        </span>
+                      </>
+                    )}
+                  </label>
+                  <input
+                    id="birthCertificate"
+                    ref={birthCertInputRef}
+                    type="file"
+                    required
+                    accept="image/*,.pdf"
+                    onChange={(e) => update("birthCertificate", e.target.files?.[0] ?? null)}
+                    className="sr-only"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="passportPhoto" className="block text-sm font-medium text-lion-black/70">
+                    Passport Photo
+                  </label>
+                  <label
+                    htmlFor="passportPhoto"
+                    className="mt-1.5 flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded-md border-2 border-dashed border-lion-black/15 bg-white px-4 py-5 text-center transition-colors hover:border-lion-gold-500"
+                  >
+                    {form.passportPhoto && passportPreviewUrl ? (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element -- local blob preview, not a static asset */}
+                        <img
+                          src={passportPreviewUrl}
+                          alt="Passport preview"
+                          className="h-12 w-12 rounded-full object-cover ring-2 ring-lion-green-800/30"
+                        />
+                        <span className="max-w-full truncate text-xs font-medium text-lion-black">
+                          {form.passportPhoto.name}
+                        </span>
+                        <span className="text-[11px] text-lion-black/40">Tap to change</span>
+                      </>
+                    ) : (
+                      <>
+                        <ImageIcon size={22} className="text-lion-black/30" />
+                        <span className="text-xs text-lion-black/50">Tap to upload (image)</span>
+                      </>
+                    )}
+                  </label>
+                  <input
+                    id="passportPhoto"
+                    ref={passportPhotoInputRef}
+                    type="file"
+                    required
+                    accept="image/*"
+                    onChange={(e) => update("passportPhoto", e.target.files?.[0] ?? null)}
+                    className="sr-only"
+                  />
+                </div>
+              </div>
+            </div>
+
             <motion.button
               type="submit"
               whileHover={{ scale: 1.02 }}
@@ -352,9 +469,32 @@ export default function RegistrationFlow() {
                   <dd className="text-right font-medium text-lion-black">{form.message}</dd>
                 </div>
               )}
+              <div className="flex justify-between gap-4">
+                <dt className="text-lion-black/50">Birth Certificate</dt>
+                <dd className="max-w-[60%] truncate font-medium text-lion-black">
+                  {form.birthCertificate?.name ?? "Not provided"}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-lion-black/50">Passport Photo</dt>
+                <dd className="max-w-[60%] truncate font-medium text-lion-black">
+                  {form.passportPhoto?.name ?? "Not provided"}
+                </dd>
+              </div>
             </dl>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-6 flex items-start gap-2 rounded-lg border border-lion-gold-500/30 bg-white p-4 text-xs leading-relaxed text-lion-black/60">
+              <UploadCloud size={16} className="mt-0.5 shrink-0 text-lion-gold-600" />
+              <p>
+                WhatsApp and Email links can&rsquo;t attach files automatically.
+                After tapping a button below, please manually attach{" "}
+                <strong>{form.birthCertificate?.name ?? "the birth certificate"}</strong> and{" "}
+                <strong>{form.passportPhoto?.name ?? "the passport photo"}</strong> from
+                your device before sending.
+              </p>
+            </div>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <a
                 href={whatsappHref}
                 target="_blank"
