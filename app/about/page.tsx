@@ -4,6 +4,7 @@ import SectionLabel from "@/components/SectionLabel";
 import Reveal from "@/components/motion/Reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
 import HoverCard from "@/components/motion/HoverCard";
+import PresidentialAddress from "@/components/PresidentialAddress";
 import { coreValues, objectives, site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -20,6 +21,8 @@ export default function AboutPage() {
         title="D Lions Football Academy Rwanda"
         description="Developing Talent. Building Character. Creating Champions."
       />
+
+      <PresidentialAddress />
 
       {/* Mission & Vision */}
       <section className="bg-white py-20 sm:py-24">
